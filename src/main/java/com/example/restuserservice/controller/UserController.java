@@ -26,19 +26,6 @@ public class UserController {
     @GetMapping("/admin")
     public String admin() {return "user/admin";}
 
-//    @PostMapping("/users/signup")
-//    public String createUser(@RequestBody UserDTO user) {
-//
-//        //JSON 형태를 자바 객체 형태로 바꿔주기 위해 @RequestBody
-//        userService.createMember(user);
-//        System.out.println(user);
-//        return "redirect:/";
-//    }
-
-//    @GetMapping("/login")
-//    public String login() {
-//        return ""
-//    }
     @PostMapping("/signup")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user) {
         user.setAuth("ROLE_MEMBER");
