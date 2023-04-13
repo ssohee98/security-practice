@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.restuserservice.mapper.MemberMapper">
+
+    <resultMap id="memberMap" type="com.example.restuserservice.domain.UserDTO">
+        <id column="userNo" property="userNo"/>
+        <result column="id" property="id" />
+        <result column="password" property="password" />
+        <result column="name" property="name" />
+        <result column="phone" property="phone" />
+        <result column="joinDate" property="joinDate" />
+        <result column="enabled" property="enabled" />
+<!--        <collection property="auth" resultMap="authMap"/>-->
+    </resultMap>
+
+    <resultMap id="authMap" type="com.example.restuserservice.domain.AuthVO">
+        <result column="id" property="id" />
+        <result column="auth" property="auth" />
+    </resultMap>
+
+    <select id="findAllUsers" resultMap="memberMap">
+        SELECT
+            *
+        FROM
+            users
+    </select>
+
+    <!-- 회원정보 확인 -->
+    <select id="findUser" resultMap="memberMap">
+        SELECT
+            *
+        FROM
+            users
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertMember" parameterType="UserDTO">
+        <selectKey keyProperty="userNo" order="BEFORE"
+                   resultType="long">
+            select user_seq.nextVal from dual
+        </selectKey>
+
+        insert into users (userNo, id, password, name, phone)
+        values (user_seq.nextval, #{id}, #{password}, #{name}, #{phone})
+    </insert>
+
+    <insert id="insertRole">
+        insert into auth values(#{id}, 'ROLE_MEMBER');
+    </insert>
+
+    <update id="updateMember" parameterType="UserDTO">
+        update users
+        set
+            phone = #{phone}
+        where
+            id = #{id}
+    </update>
+
+    <update id="deleteUser">
+        update users
+        set
+            enabled = 0
+        where
+            id = #{id}
+    </update>
+
+    <select id="getId" resultType="String">
+        select id from users where id = #{id} and name = #{name}
+    </select>
+
+    <select id="updatePw" resultType="String">
+        update users
+            set password = #{password}
+        where id = {id} and name = #{name}
+    </select>
+
+    <select id="getUser" parameterType="UserDTO">
+        select * from users where id = #{id}
+    </select>
+
+    <select id="getUserById" parameterType="UserDTO">
+        select * from users where id = #{id}
+    </select>
+
+
+<!--    <select id="getUserById" parameterType="UserDTO">-->
+<!--        select userNo, id from users where userNo = #{userNo}-->
+<!--    </select>-->
+
+
+</mapper>
